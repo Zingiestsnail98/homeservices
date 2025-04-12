@@ -1,0 +1,22 @@
+[
+    {"name":"AARP Caregiving","type":"Caregiver Training Programs","category":"Caregiver Education and Support","url":"http://aarp.org/caregiving","level":"national","state":""},
+    {"name":"Meals on Wheels America","type":"Home-Delivered Meals","category":"Nutrition and Daily Needs","url":"http://mealsonwheelsamerica.org","level":"national","state":""},
+    {"name":"Medicare Home Health","type":"Skilled Nursing Care","category":"Medical and Nursing Care","url":"http://medicare.gov/homehealth","level":"national","state":""},
+    {"name":"National Hospice","type":"Hospice Care","category":"Medical and Nursing Care","url":"http://nationalhospice.org","level":"national","state":""},
+    {"name":"CA Home Health Network","type":"Home Health Aides","category":"Personal Care Services","url":"http://cahomehealth.org","level":"regional","state":"CA"},
+    {"name":"NY Caregiver Alliance","type":"Support Groups","category":"Mental and Emotional Support","url":"http://nycaregiver.org","level":"regional","state":"NY"},
+    {"name":"IL Respite Services","type":"Respite Care","category":"Personal Care Services","url":"http://ilrespite.org","level":"regional","state":"IL"},
+    {"name":"CA Adaptive Equipment","type":"Adaptive Equipment Providers","category":"Equipment and Home Modifications","url":"http://caadaptive.org","level":"regional","state":"CA"},
+    {"name":"Beverly Hills Home Care","type":"Home Health Aides","category":"Personal Care Services","url":"http://beverlyhillshomecare.com","level":"local","state":"CA","zipCode":"90210"},
+    {"name":"Elite Nursing LA","type":"Skilled Nursing Care","category":"Medical and Nursing Care","url":"http://elitenursingla.com","level":"local","state":"CA","zipCode":"90210"},
+    {"name":"Westside PT","type":"Physical Therapy","category":"Therapy and Rehabilitation","url":"http://westsidept.org","level":"local","state":"CA","zipCode":"90212"},
+    {"name":"NYC Care Companions","type":"Companionship Services","category":"Personal Care Services","url":"http://nyccarecompanions.org","level":"local","state":"NY","zipCode":"10001"},
+    {"name":"Chicago Mobility","type":"Adaptive Equipment Providers","category":"Equipment and Home Modifications","url":"http://chicagomobility.org","level":"local","state":"IL","zipCode":"60601"},
+    {"name":"Legal Aid LA","type":"Legal Aid Services","category":"Financial and Legal Assistance","url":"http://legalaidla.org","level":"local","state":"CA","zipCode":"90210"},
+    {"name":"Telehealth NY","type":"Telehealth Services","category":"Care Coordination and Technology","url":"http://telehealthny.org","level":"local","state":"NY","zipCode":"10001"},
+    {"name":"CA Hospice Care","type":"Hospice Care","category":"Medical and Nursing Care","url":"http://cahospice.org","level":"regional","state":"CA"},
+    {"name":"Mindful Support IL","type":"Counseling Services","category":"Mental and Emotional Support","url":"http://mindfulsupportil.org","level":"local","state":"IL","zipCode":"60601"},
+    {"name":"NY Meals Delivery","type":"Home-Delivered Meals","category":"Nutrition and Daily Needs","url":"http://nymeals.org","level":"local","state":"NY","zipCode":"10001"},
+    {"name":"IL Transport","type":"Transportation Services","category":"Transportation and Mobility","url":"http://iltransport.org","level":"local","state":"IL","zipCode":"60601"},
+    {"name":"CA Wellness","type":"Caregiver Wellness Programs","category":"Caregiver Education and Support","url":"http://cawellness.org","level":"regional","state":"CA"}
+]

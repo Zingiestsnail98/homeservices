@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Services Near You</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 2rem;
+            background: linear-gradient(135deg, #e6f0fa 0%, #f7e4e9 100%);
+            color: #1a3c5e;
+        }
+        h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            font-weight: 600;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        .category-section {
+            max-width: 1000px;
+            margin: 2rem auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            transition: transform 0.3s;
+        }
+        .category-section:hover {
+            transform: translateY(-5px);
+        }
+        .category-section h3 {
+            font-size: 2rem;
+            color: #4a90e2;
+            margin: 0 0 1.5rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e0e7ff;
+        }
+        th {
+            background: #4a90e2;
+            color: white;
+            font-weight: 500;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+        td {
+            background: #f9fbff;
+            font-size: 1rem;
+        }
+        tr:hover td {
+            background: #f0f4ff;
+        }
+        a {
+            color: #4a90e2;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        a:hover {
+            color: #357abd;
+            text-decoration: underline;
+        }
+        .error, .loading {
+            text-align: center;
+            padding: 1.5rem;
+            font-size: 1.1rem;
+        }
+        .error {
+            color: #d32f2f;
+        }
+        .loading {
+            color: #1a3c5e;
+            font-style: italic;
+        }
+        .no-services {
+            text-align: center;
+            color: #7f8c8d;
+            font-style: italic;
+            padding: 1.5rem;
+            font-size: 1.1rem;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .category-section {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <h2>Caregiver Services Near <span id="zipDisplay"></span></h2>
+    <div id="servicesContainer"></div>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const userZip = urlParams.get('zip') || '90210';
+        document.getElementById('zipDisplay').textContent = userZip;
+
+        // State lookup by ZIP
+        const zipToState = {
+            '90210': 'CA',
+            '90212': 'CA',
+            '10001': 'NY',
+            '60601': 'IL',
+            '33101': 'FL',
+            '77001': 'TX'
+        };
+        const userState = zipToState[userZip] || 'CA';
+
+        async function fetchServices() {
+            try {
+                const response = await fetch('/services.json');
+                if (!response.ok) throw new Error('Failed to load services');
+                return await response.json();
+            } catch (err) {
+                console.error('Fetch error:', err);
+                return [];
+            }
+        }
+
+        async function loadServices() {
+            const container = document.getElementById('servicesContainer');
+            container.innerHTML = '<div class="loading">Loading services...</div>';
+
+            try {
+                const services = await fetchServices();
+                const filteredServices = services.filter(service => {
+                    if (service.level === 'national') return true;
+                    if (service.level === 'regional' && service.state === userState) return true;
+                    if (service.level === 'local' && (service.zipCode === userZip || Math.abs(parseInt(service.zipCode || '00000') - parseInt(userZip)) < 100)) return true;
+                    return false;
+                });
+
+                const sortedServices = filteredServices
+                    .sort((a, b) => {
+                        const levelOrder = { national: 1, regional: 2, local: 3 };
+                        return levelOrder[a.level] - levelOrder[b.level];
+                    })
+                    .slice(0, 500);
+
+                container.innerHTML = '';
+                if (sortedServices.length === 0) {
+                    container.innerHTML = '<div class="no-services">No services found. Try another ZIP.</div>';
+                    return;
+                }
+
+                const servicesByCategory = {};
+                sortedServices.forEach(service => {
+                    servicesByCategory[service.category] = servicesByCategory[service.category] || [];
+                    servicesByCategory[service.category].push(service);
+                });
+
+                Object.keys(servicesByCategory).sort().forEach(category => {
+                    const section = document.createElement('div');
+                    section.className = 'category-section';
+                    section.innerHTML = `<h3>${category}</h3>`;
+                    const table = document.createElement('table');
+                    table.innerHTML = `
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Website</th>
+                                <th>Level</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    `;
+                    const tbody = table.querySelector('tbody');
+                    servicesByCategory[category].forEach(service => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${service.name}</td>
+                            <td><a href="${service.url}" target="_blank">${service.url}</a></td>
+                            <td>${service.level.charAt(0).toUpperCase() + service.level.slice(1)}</td>
+                        `;
+                        tbody.appendChild(row);
+                    });
+                    section.appendChild(table);
+                    container.appendChild(section);
+                });
+            } catch (error) {
+                container.innerHTML = `<div class="error">Error: ${error.message}</div>`;
+            }
+        }
+
+        loadServices();
+    </script>
+</body>
+</html>

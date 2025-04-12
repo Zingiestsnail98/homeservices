@@ -1,0 +1,27 @@
+name: Update Caregiver Services
+on:
+  schedule:
+    - cron: '0 6,18 * * *' # 6 AM, 6 PM UTC
+  workflow_dispatch:
+jobs:
+  update-services:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+      - name: Install dependencies
+        run: npm install
+      - name: Update services.json
+        run: node update-services.js
+        env:
+          SERPWOW_API_KEY: ${{ secrets.SERPWOW_API_KEY }}
+      - name: Commit changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add services.json
+          git commit -m "Add new services to services.json" || echo "No changes"
+          git push
